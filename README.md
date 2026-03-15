@@ -21,7 +21,9 @@ SnapTabs is a Chrome extension that saves your open tabs as sessions — includi
 
 ## Screenshots
 
-<!-- TODO: Add screenshots -->
+| Main View | Settings |
+|---|---|
+| ![Main popup view](screenshots/popup-main.png) | ![Settings view](screenshots/settings.png) |
 
 ## Install
 
@@ -32,7 +34,7 @@ SnapTabs is a Chrome extension that saves your open tabs as sessions — includi
 ### From Source
 
 ```bash
-git clone https://github.com/user/snaptabs.git
+git clone https://github.com/rc22-rahul/SnapTabs.git
 cd snaptabs
 npm install
 npm run build
