@@ -371,6 +371,7 @@
   {:else}
     <Header
       {recording}
+      sessionCount={sessions.length}
       onSettingsClick={() => view = 'settings'}
     />
 

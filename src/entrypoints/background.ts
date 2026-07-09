@@ -4,7 +4,6 @@ import { uuid, formatSessionName, isExcludedUrl } from '../lib/types';
 import { createSnapshot, restoreSession, getTabStats, captureWindow, toSavedTab, mergeGroups, isRestorable } from '../lib/tabs';
 import type { WindowCapture } from '../lib/storage';
 import {
-  KEYS,
   getSessions,
   getSettings,
   updateSettings,
@@ -113,8 +112,7 @@ export default defineBackground(() => {
   async function recoverLastSnapshotIfFreshStart() {
     try {
       const settings = await getSettings();
-      const recovered = await recoverLastSnapshot(settings);
-      if (recovered) await updateBadge();
+      await recoverLastSnapshot(settings);
     } catch (e) {
       console.error('[SnapTabs] recoverLastSnapshot error:', e);
     }
@@ -122,6 +120,8 @@ export default defineBackground(() => {
 
   // ── Badge ──
 
+  // Badge is recording-only: a red ● while live recording, nothing otherwise.
+  // The session count lives in the popup header instead of the toolbar.
   async function updateBadge() {
     try {
       if (isRecordingActive) {
@@ -129,9 +129,7 @@ export default defineBackground(() => {
         await chrome.action.setBadgeBackgroundColor({ color: '#ef4444' });
         return;
       }
-      const sessions = await getSessions();
-      await chrome.action.setBadgeText({ text: sessions.length > 0 ? String(sessions.length) : '' });
-      await chrome.action.setBadgeBackgroundColor({ color: '#18181b' });
+      await chrome.action.setBadgeText({ text: '' });
     } catch {}
   }
 
@@ -197,13 +195,11 @@ export default defineBackground(() => {
           isAutoSave: true,
         };
         await saveSession(session);
-        await updateBadge();
       } else {
         // Normal window close — accumulate into pending buffer so multi-window
         // Cmd+Q captures every window's tabs and groups, not just the last one.
         if (!settings.autoSnapshotOnBrowserClose) return;
-        const saved = await processNormalWindowClose(filtered, cachedGroups, remaining.length === 0);
-        if (saved) await updateBadge();
+        await processNormalWindowClose(filtered, cachedGroups, remaining.length === 0);
       }
     } catch {}
   }
@@ -251,21 +247,17 @@ export default defineBackground(() => {
 
   chrome.contextMenus.onClicked.addListener(async (info) => {
     if (info.menuItemId === 'snaptabs-save-all') {
-      try { await createSnapshot(); await updateBadge(); } catch {}
+      try { await createSnapshot(); } catch {}
     }
   });
 
   if (chrome.commands?.onCommand) {
     chrome.commands.onCommand.addListener(async (cmd) => {
       if (cmd === 'snapshot-tabs') {
-        try { await createSnapshot(); await updateBadge(); } catch {}
+        try { await createSnapshot(); } catch {}
       }
     });
   }
-
-  chrome.storage.onChanged.addListener((changes, area) => {
-    if (area === 'local' && changes[KEYS.sessions]) updateBadge();
-  });
 
   // ── Omnibox ──
 
@@ -359,7 +351,6 @@ export default defineBackground(() => {
           false,
           typeof msg.windowId === 'number' ? msg.windowId : undefined,
         );
-        await updateBadge();
         return session;
       }
       case 'restore': {
@@ -369,12 +360,10 @@ export default defineBackground(() => {
         const settings = await getSettings();
         await restoreSession(session, settings.restoreIncognitoToIncognito, settings.restoreInNewWindow);
         if (settings.autoDeleteAfterRestore) await deleteSession(session.id);
-        await updateBadge();
         return { success: true };
       }
       case 'delete': {
         await deleteSession(msg.sessionId as string);
-        await updateBadge();
         return { success: true };
       }
       case 'togglePin': {

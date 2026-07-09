@@ -3,10 +3,11 @@
 
   interface Props {
     recording: LiveRecording | null;
+    sessionCount: number;
     onSettingsClick: () => void;
   }
 
-  let { recording, onSettingsClick }: Props = $props();
+  let { recording, sessionCount, onSettingsClick }: Props = $props();
 </script>
 
 <header class="header">
@@ -26,6 +27,8 @@
           <span class="rec-dot"></span>
           Recording
         </span>
+      {:else if sessionCount > 0}
+        <span class="session-count">{sessionCount} session{sessionCount === 1 ? '' : 's'} saved</span>
       {/if}
     </div>
   </div>
@@ -71,6 +74,10 @@
     font-size: 14px;
     font-weight: 600;
     color: var(--fg);
+  }
+  .session-count {
+    font-size: 11px;
+    color: var(--fg-muted);
   }
   .rec-indicator {
     display: flex;
