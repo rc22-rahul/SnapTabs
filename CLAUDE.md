@@ -38,7 +38,7 @@ SnapTabs is a Chrome extension (Manifest V3) that snapshots and restores browser
 - **Duplicate snapshot warning**: before saving a manual snapshot from the popup, compares the candidate tab set against the most recent session via a URL-set signature (order-, fragment-, trailing-slash-insensitive; `isRestorable`-filtered on both sides). If matched, shows a confirm modal with "Cancel" / "Save anyway". Context-menu and keyboard-shortcut snapshots bypass the check. Controlled by `warnOnDuplicateSnapshot` (default true).
 - **Excluded domains**: per-domain skip list applied at capture time (manual snapshot, live recording, auto-save on close). Exact host or subdomain match — `github.com` matches `api.github.com`. Input is normalized (strips protocol, `www.`, path, query, casing). Lives in `excludedDomains: string[]` setting.
 - **Storage management**: 10 MB quota with automatic pruning (oldest auto-saves removed first, pinned sessions never pruned). Configurable session limit (1-500). Storage usage bar in settings.
-- **Settings**: 9 options grouped into 6 sections in the order: **Auto-Save** (auto-snapshot on browser close [default false], auto-save on incognito close), **Snapshot** (warn on duplicate snapshot [default true], excluded domains [default []]), **Restore** (open in new window, auto-delete after restore, restore private to private), **Warnings** (show incognito warning), **Storage** (max sessions limit), **Data** (import/export, clear all in Danger zone). Section order is importance-first — Auto-Save is the headline behavior.
+- **Settings**: 9 options grouped into 6 sections in the order: **Auto-Save** (auto-snapshot on browser close [default false], auto-save on incognito close), **Snapshot** (warn on duplicate snapshot [default true], excluded domains [default []]), **Restore** (open in new window, auto-delete after restore, restore private to private), **Warnings** (show incognito warning), **Storage** (max sessions limit), **Data** (import/export, clear all in Danger zone). A **Feedback** section (link card to GitHub issues) sits between Data and the Danger zone. Section order is importance-first — Auto-Save is the headline behavior.
 
 ### Permissions (minimal set)
 
@@ -92,13 +92,13 @@ The popup is a fixed 400×600px window with three views:
 
 | Component | File | Role |
 |---|---|---|
-| Header | `src/components/Header.svelte` | Logo, brand name, session count ("N sessions saved"), recording indicator, settings button |
+| Header | `src/components/Header.svelte` | Logo, brand name, session count ("N sessions saved"), recording indicator, GitHub link, settings button |
 | SnapshotBar | `src/components/SnapshotBar.svelte` | Scope dropdown, snapshot button, record toggle, incognito warning |
 | RecordingBar | `src/components/RecordingBar.svelte` | Timer, tab count, recent tabs preview, stop/cancel buttons |
 | SessionList | `src/components/SessionList.svelte` | Search input, sort dropdown, scrollable list of SessionCards, empty states |
 | SessionCard | `src/components/SessionCard.svelte` | Session name (inline rename), badges, metadata, tab group chips, context menu |
 | SessionDetail | `src/components/SessionDetail.svelte` | Full session view with collapsible tab groups, favicons, restore/delete/rename |
-| Settings | `src/components/Settings.svelte` | Toggle rows, max sessions input, storage bar, danger zone |
+| Settings | `src/components/Settings.svelte` | Toggle rows, max sessions input, storage bar, GitHub feedback card, danger zone |
 | Toast | `src/components/Toast.svelte` | Success/error/warning notifications, auto-dismiss |
 
 ## Svelte 5 Constraints

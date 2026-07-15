@@ -14,7 +14,7 @@ The point is not to keep 200 tabs open. The point is to close them without losin
 
 | | |
 |---|---|
-| Latest version | 1.7.0 |
+| Latest version | 1.8.0 |
 | Browser | Chrome 93+ |
 | Manifest | V3 |
 | Storage | Local only. No cloud sync |

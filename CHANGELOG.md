@@ -4,6 +4,18 @@ All notable changes to SnapTabs are documented here.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-07-16
+
+### Added
+
+- **GitHub feedback links.** The popup header now has a GitHub icon next to the settings button that opens the SnapTabs repository, and **Settings** gained a new **Feedback** section ("Have an issue or a suggestion?") linking straight to the GitHub issues page for bug reports and feature requests.
+
+## [1.7.0] - 2026-07-09
+
+### Changed
+
+- **Session count moved from the toolbar badge to the popup.** The extension badge no longer shows the number of stored sessions — it is now recording-only (a red ● while live recording, empty otherwise). The count appears as a "N sessions saved" subtitle under the brand name in the popup header instead.
+
 ## [1.6.0] - 2026-06-12
 
 ### Fixed
